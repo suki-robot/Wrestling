@@ -1,0 +1,28 @@
+name: Setup Gradle Wrapper
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Generate Gradle Wrapper
+      run: |
+        gradle wrapper --gradle-version 6.9
+        git add gradle/ gradlew gradlew.bat
+        git commit -m "Add Gradle wrapper files"
+        git push
+
+    - name: Verify Wrapper
+      run: ./gradlew --version
